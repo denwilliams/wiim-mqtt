@@ -1,0 +1,12 @@
+mqtt:
+  uri: mqtt://localhost
+  prefix: wiim
+http:
+  port: 8080
+service:
+  devices:
+    - id: living
+      host: 192.168.1.100
+    - id: bedroom
+      host: 192.168.1.101
+  poll_interval: 60000
