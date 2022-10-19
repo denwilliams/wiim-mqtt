@@ -27,6 +27,8 @@ const gotOpts = {
 const getUrl = (host, command, params = []) =>
   `https://${host}/httpapi.asp?command=${[command, ...params].join(":")}`;
 
+const latestPlayerStatus = {};
+
 async function main() {
   const service = await mqttusvc.create();
   /** @type {Config} */
@@ -42,7 +44,10 @@ async function main() {
     const body = await res.body;
 
     if (command === "getPlayerStatus") {
-      service.send(`~/status/${device.id}/playerStatus`, JSON.parse(body));
+      if (body !== latestPlayerStatus[device.id]) {
+        service.send(`~/status/${device.id}/playerStatus`, JSON.parse(body));
+      }
+      latestPlayerStatus[device.id] = body;
     } else if (command === "getStatusEx") {
       service.send(`~/status/${device.id}/statusEx`, JSON.parse(body));
     } else if (command === "wlanGetConnectState") {
